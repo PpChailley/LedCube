@@ -1,11 +1,16 @@
-#define DATA(x) (12-x)
-#define OUTENA_  3
-#define CLK     2
+#define DATA(x)     (12-x)
+#define OUTENA_     14
+#define CLK         2
+#define PLANE_SEL   4
+#define PWM         3
 
 
 char outByte = 0x1;
 
-void setup() 
+/**************************************
+ *     SETUP
+ **************************************/
+inline void setupPinDirections()
 {
   for (int i = 0; i < 8; i++)
   {
@@ -13,17 +18,32 @@ void setup()
   }
   pinMode(OUTENA_, OUTPUT);
   pinMode(CLK, OUTPUT);
+  pinMode(PLANE_SEL, OUTPUT);
+  pinMode(PWM, OUTPUT);
+}
 
+inline void setupStartingLevels()
+{
   for (int i = 0; i < 8; i++)
   {
     digitalWrite(DATA(i), LOW);
   }
   digitalWrite(OUTENA_, LOW);
   digitalWrite(CLK, LOW);
+  digitalWrite(PLANE_SEL, LOW);
+  analogWrite(PWM, 128);
   
 }
 
+void setup() 
+{
+  setupPinDirections();
+  setupStartingLevels();
+}
 
+/**************************************
+ *     API
+ **************************************/
 void display(unsigned char d)
 {
   digitalWrite(CLK, LOW);
@@ -52,6 +72,10 @@ void display(unsigned char d)
   digitalWrite(CLK, HIGH);
 }
 
+
+/**************************************
+ *     LOOP
+ **************************************/
 void loop() 
 {
   digitalWrite(LED_BUILTIN, HIGH);
@@ -74,4 +98,3 @@ void loop()
   
 
 }
-
