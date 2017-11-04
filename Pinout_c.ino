@@ -1,13 +1,19 @@
 #include "pinout.h"
 
-#pragma HERE
-
 
 /***************************** 
  *  PINS DIRECTION
  *****************************/
 inline void setupPinDirections()
 {
+
+  for (int i = 0; i < 40; i++)
+  {
+    pinMode(i, OUTPUT);
+  }
+  
+  
+  /*
   pinMode(LED_BUILTIN, OUTPUT);
     
   for (int i = 0; i < 8; i++)
@@ -18,6 +24,7 @@ inline void setupPinDirections()
   pinMode(CLK, OUTPUT);
   pinMode(PLANE_SEL, OUTPUT);
   pinMode(PWM, OUTPUT);
+  */
 }
 
 /***************************** 
@@ -25,7 +32,7 @@ inline void setupPinDirections()
  *****************************/
 inline void setupStartingLevels()
 {
-
+/*
   digitalWrite(LED_BUILTIN, LOW);
   
   for (int i = 0; i < 8; i++)
@@ -36,5 +43,5 @@ inline void setupStartingLevels()
   digitalWrite(CLK, LOW);
   digitalWrite(PLANE_SEL, LOW);
   analogWrite(PWM, 128);
-  
+  */
 }
