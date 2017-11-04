@@ -3,7 +3,9 @@
 
 #include "Pinout.h"
 
-unsigned char outByte = 0x0;
+unsigned char busData[] = {0x0,0x01,0xFE,0x02,0x04,0x08, 0x10, 0xEF,0x20, 0x40, 0x80};
+
+
 
 /**************************************
  *     SETUP
@@ -13,7 +15,6 @@ void setup()
   setupPinDirections();
   setupStartingLevels();
 
-  outByte = 0x0;
   Serial.begin(9600);    
 }
 
@@ -22,28 +23,18 @@ void setup()
  **************************************/
 void display(unsigned char d)
 {
-    Serial.print("Displaying ");
-    Serial.println(d, HEX);
-    
+  //DRIVE(OUTENA_, HIGH, 500);
+
+  Serial.println(d, HEX);
 
   for (int i = 0; i<8; i++)
-  {
-    if ( (d&(0x1<<i)) != 0)
-    {
-      digitalWrite(DATA(i), HIGH); 
-    }
-    else
-    {
-      digitalWrite(DATA(i), LOW); 
-    }
-    delay(100);
-  }
+    digitalWrite(DATA(i), IF_BITSET(d,i,HIGH));
 
   delay(1000);
-  digitalWrite(CLK, HIGH);
-  delay(200);
-  digitalWrite(CLK, LOW);
-
+  DRIVE(CLK, LOW, 300);
+  delay(1000);
+  DRIVE(PLANE_SEL, LOW, 500);
+  
 }
 
 
@@ -51,9 +42,7 @@ void BlinkBuiltin()
 {
   for (int i = 0; i<5; i++)
   {
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(50);
-    digitalWrite(LED_BUILTIN, LOW);
+    DRIVE(LED_BUILTIN, HIGH,50)
     delay(50);
   }
 
@@ -75,12 +64,14 @@ void SweepBus()
  **************************************/
 void loop() 
 {
+  static int dataIndex = 0;
+  
   BlinkBuiltin();
 
-  display(outByte);
-  outByte +=7;
+  display(busData[dataIndex]);
+  dataIndex = (dataIndex++) % sizeof(values);
 
-  SweepBus();
-  SweepBus();
+  FADELOW(PWM, 2000);
+  FADEHIGH(PWM, 2000);
 
 }

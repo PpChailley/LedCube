@@ -6,14 +6,14 @@
  *****************************/
 inline void setupPinDirections()
 {
-
+/*
   for (int i = 0; i < 40; i++)
   {
     pinMode(i, OUTPUT);
   }
+*/  
   
   
-  /*
   pinMode(LED_BUILTIN, OUTPUT);
     
   for (int i = 0; i < 8; i++)
@@ -24,7 +24,6 @@ inline void setupPinDirections()
   pinMode(CLK, OUTPUT);
   pinMode(PLANE_SEL, OUTPUT);
   pinMode(PWM, OUTPUT);
-  */
 }
 
 /***************************** 
