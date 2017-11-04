@@ -1,40 +1,11 @@
-#define DATA(x)     (12-x)
-#define OUTENA_     14
-#define CLK         2
-#define PLANE_SEL   4
-#define PWM         3
-
+#include <Arduino.h>
+#include "Pinout.h"
 
 char outByte = 0x1;
 
 /**************************************
  *     SETUP
  **************************************/
-inline void setupPinDirections()
-{
-  for (int i = 0; i < 8; i++)
-  {
-    pinMode(DATA(i), OUTPUT);
-  }
-  pinMode(OUTENA_, OUTPUT);
-  pinMode(CLK, OUTPUT);
-  pinMode(PLANE_SEL, OUTPUT);
-  pinMode(PWM, OUTPUT);
-}
-
-inline void setupStartingLevels()
-{
-  for (int i = 0; i < 8; i++)
-  {
-    digitalWrite(DATA(i), LOW);
-  }
-  digitalWrite(OUTENA_, LOW);
-  digitalWrite(CLK, LOW);
-  digitalWrite(PLANE_SEL, LOW);
-  analogWrite(PWM, 128);
-  
-}
-
 void setup() 
 {
   setupPinDirections();
@@ -68,32 +39,40 @@ void display(unsigned char d)
   for (int i = 0; i < 8; i++)
   {
     digitalWrite(DATA(i), (i==led_ON ? HIGH: LOW));
+    delay(400);
   }
+
+  delay(1000);
   digitalWrite(CLK, HIGH);
 }
 
+
+void BlinkBuiltin()
+{
+  for (int i = 0; i<10; i++)
+  {
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(100);
+    digitalWrite(LED_BUILTIN, LOW);
+    delay(100);
+  }
+
+  delay(400);
+}
 
 /**************************************
  *     LOOP
  **************************************/
 void loop() 
 {
-  digitalWrite(LED_BUILTIN, HIGH);
- // digitalWrite(DATA(0), HIGH);
-  delay(100);
- digitalWrite(LED_BUILTIN, LOW);
- // digitalWrite(DATA(0), LOW);
-  delay(200);
-  
-  //outByte = (outByte ? outByte <<1 : 0x1);
 
+  BlinkBuiltin();
+  
   if (outByte == 0 || outByte > 8)
     outByte = 0x1;
   else
     outByte = outByte * 2 ;
-  
-  //Serial.println(F("Byte value"));
-  //Serial.println(outByte);
+    
   display(outByte);
   
 
